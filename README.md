@@ -1,50 +1,86 @@
-# BridgeXAPI Telegram Bot Example
+# BridgeXAPI Telegram Bot
 
-A Telegram bot that talks to the live BridgeXAPI endpoints.
+Example Telegram bot that connects directly to the BridgeXAPI messaging infrastructure.
+
+No dashboards.
+No hidden routing.
+Everything is exposed through the API.
+
+---
+
+## What this is
+
+This project is a minimal, working example of how to interact with BridgeXAPI from a Telegram interface.
+
+It is not a mock.
+
+All data is fetched live from the API:
+
+* balance
+* routes
+* pricing
+* message submission
+
+---
 
 ## Features
 
-- `/balance` fetches live API balance
-- `/routes` fetches live route catalog
-- `/pricing` shows route buttons for live pricing lookup
-- `/send <route_id> <number> <message>` sends one SMS
-- inline buttons for balance, routes, and pricing
+* `/balance` → fetch live API balance
+* `/routes` → fetch route catalog
+* `/pricing` → interactive route pricing lookup
+* `/send <route_id> <number> <message>` → send SMS
+* inline buttons for navigation
 
-## Commands
+---
+
+## Example
 
 ```bash
-/start
-/help
-/menu
-/balance
-/routes
-/pricing
 /send 3 31651860670 Your verification code is 4839
 ```
 
+This directly maps to:
+
+```python
+client.send_sms(
+    route_id=3,
+    caller_id="BRIDGEXAPI",
+    numbers=["31651860670"],
+    message="Your verification code is 4839"
+)
+```
+
+Routing is explicit.
+
+---
+
 ## Setup
 
-```bash
-git clone <your-repo-url>
-cd bridgexapi-telegram-bot
-python -m venv .venv
-```
+This bot uses the BridgeXAPI platform.
 
-### Windows
+You need a BridgeXAPI account and API key.
 
-```bash
-.venv\Scripts\activate
-```
+### 1. Create account
 
-### Install
+https://dashboard.bridgexapi.io
+
+### 2. Get API key
+
+Go to:
+
+**Developer → Console**
+
+Copy your API key.
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Configure environment
+### 4. Configure environment
 
-Copy `.env.example` to `.env` and fill in your values.
+Copy `.env.example` → `.env`
 
 ```env
 BOT_TOKEN=your_telegram_bot_token
@@ -54,22 +90,52 @@ DEFAULT_CALLER_ID=BRIDGEXAPI
 REQUEST_TIMEOUT=20
 ```
 
-## Run
+### 5. Run
 
 ```bash
 python bot.py
 ```
 
+---
+
+## Commands
+
+```
+/start
+/help
+/menu
+/balance
+/routes
+/pricing
+/send <route_id> <number> <message>
+```
+
+---
+
 ## Notes
 
-- pricing and route data are fetched from the live API
-- route buttons are wired for route ids 1, 2, 3, and 4
-- `/send` requires the route id explicitly so the user controls routing
-- caller ID stays explicit through environment config
-- numbers should be digits only
-- messages should be plain ASCII text
+* routing is controlled via `route_id`
+* pricing depends on route + destination prefix
+* numbers must be digits only
+* messages should be ASCII
+* no UI abstraction — direct API interaction
+
+---
 
 ## Docs
 
-- docs: https://docs.bridgexapi.io
-- dashboard: https://dashboard.bridgexapi.io
+https://docs.bridgexapi.io
+https://dashboard.bridgexapi.io
+
+---
+
+## About BridgeXAPI
+
+BridgeXAPI is a messaging infrastructure API for developers.
+
+* single endpoint
+* multiple routes
+* explicit routing control
+* real pricing per destination
+
+Built for systems, not dashboards.
