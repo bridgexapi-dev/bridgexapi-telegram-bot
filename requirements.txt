@@ -1,0 +1,4 @@
+bridgexapi
+pyTelegramBotAPI
+python-dotenv
+requests
